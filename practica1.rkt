@@ -158,9 +158,147 @@
                                   [(> (image-height imagen) (image-width imagen)) "Flaca"]
                                   [(< (image-height imagen) (image-width imagen)) "Gorda"]))
 
+;5
 
+(define (clasificar t) (cond [(< t 0) "Perder 3 finales seguidas"]
+                             [(and (> t 0) (< t 15)) "Frío (F)"]
+                             [(and (> t 15) (< t 25)) "Agradable (A)"]
+                             [(> t 25) "El mas grande del interior"]))
 
+#|
 
+(clasificar -3)
 
+==
 
+(cond [(< -3 0) "Perder 3 finales seguidas"]
+      [(and (> -3 0) (< -3 15)) "Frío (F)"]
+      [(and (> -3 15) (< -3 25)) "Agradable (A)"]
+      [(> -3 25) "El mas grande del interior"])
 
+==
+
+(cond [#true "Perder 3 finales seguidas"]
+      [(and (> -3 0) (< -3 15)) "Frío (F)"]
+      [(and (> -3 15) (< -3 25)) "Agradable (A)"]
+      [(> -3 25) "El mas grande del interior"])
+
+==
+
+"Perder tres finales seguidas"
+
+-------------------------------------------------
+
+(clasificar 12)
+
+==
+
+(cond [(< 12 0) "Perder 3 finales seguidas"]
+      [(and (> 12 0) (< 12 15)) "Frío (F)"]
+      [(and (> 12 15) (< 12 25)) "Agradable (A)"]
+      [(> 12 25) "El mas grande del interior"])
+
+==
+
+(cond [#false "Perder 3 finales seguidas"]
+      [(and (> 12 0) (< 12 15)) "Frío (F)"]
+      [(and (> 12 15) (< 12 25)) "Agradable (A)"]
+      [(> 12 25) "El mas grande del interior"])
+
+==
+
+(cond [(and (> 12 0) (< 12 15)) "Frío (F)"]
+      [(and (> 12 15) (< 12 25)) "Agradable (A)"]
+      [(> 12 25) "El mas grande del interior"])
+
+==
+
+(cond [#true "Frío (F)"]
+      [(and (> 12 15) (< 12 25)) "Agradable (A)"]
+      [(> 12 25) "El mas grande del interior"])
+
+==
+
+"Frío (F)"
+
+-------------------------------------------------
+
+(clasificar 28)
+
+==
+
+(cond [(< 28 0) "Perder 3 finales seguidas"]
+      [(and (> 28 0) (< 28 15)) "Frío (F)"]
+      [(and (> 28 15) (< 28 25)) "Agradable (A)"]
+      [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [#false "Perder 3 finales seguidas"]
+      [(and (> 28 0) (< 28 15)) "Frío (F)"]
+      [(and (> 28 15) (< 28 25)) "Agradable (A)"]
+      [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [(and (> 28 0) (< 28 15)) "Frío (F)"]
+      [(and (> 28 15) (< 28 25)) "Agradable (A)"]
+      [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [#false "Frío (F)"]
+      [(and (> 28 15) (< 28 25)) "Agradable (A)"]
+      [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [(and (> 28 15) (< 28 25)) "Agradable (A)"]
+      [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [#false "Agradable (A)"]
+      [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [(> 28 25) "El mas grande del interior"])
+
+==
+
+(cond [#true "El mas grande del interior"])
+
+==
+
+"El mas grande del interior"
+
+-----------------------------------------------
+
+Lo que sucede con la expresion (clasificar 15) es que el valor 15 no es tenido en cuenta en las condiciones del programa, al poner (< t 15) y (> t 15) no esta comprendido el 15.
+Lo mismo sucede con el 0 y el 25.
+
+|#
+
+(define (clasificarv2 t) (cond [(< t 0) "Perder 3 finales seguidas"]
+                             [(and (>= t 0) (< t 15)) "Frío (F)"]
+                             [(and (>= t 15) (< t 25)) "Agradable (A)"]
+                             [(>= t 25) "El mas grande del interior"]))
+
+;6, 7, 8, 9
+
+(define (sgn2 x) (cond [(< x 0) -1]
+                       [(= x 0) 0]
+                       [(> x 0) 1]))
+
+(define (booltonumber b) (cond [ (and #t b) 1] [else 0]) )
+
+(define (imageTypeToNumber imagen) (cond [(equal? (gofoc imagen) "Flaca") -1] [(equal? (gofoc imagen) "Cuadrada") 0] [(equal? (gofoc imagen) "Gorda") 1]) )
+
+(define (stringConvertible? s) (cond [(number? (string->number s)) #t] [(boolean? (string->number s)) #f]) )
+
+(define (sgn3 x) (cond [(number? x) (sgn2 x)]
+                       [(string? x) (if (stringConvertible? x) (sgn2 (string->number x)) "La cadena no se puede convertir a string")]
+                       [(boolean? x) (sgn2 (booltonumber x ))]
+                       [(image? x) (sgn2 (imageTypeToNumber x ))]
+                       [else "Clase no soportada por la funcion"]))
