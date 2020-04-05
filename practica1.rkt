@@ -3,6 +3,8 @@
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname practica1) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 (require 2htdp/image)
 
+;Primera parte:
+
 ; Ejercicio 1.3.1
 
 ;1
@@ -21,7 +23,7 @@
 
 ;4
 
-(define (triangulo?v2 a b c) (if (= (+ a b c) 180) (if (= a b c) "Equilatero" (if (tresDesiguales? a b c) "Escaleno" "Isosceles")) "Error" ))
+(define (triangulo?v2 a b c) (if (= (+ a b c) 180) (triangulo? a b c) "Error" ))
 
 ;5
 
@@ -41,11 +43,11 @@
 
 ;7
 
-(define (pitagorica?2 a b c) (if (= (+ (expt a 2) (expt b 2) ) (expt c 2)) #true #false ) )
+(define (pitagorica?v2 a b c) (if (= (+ (expt a 2) (expt b 2) ) (expt c 2)) #true (if (= (+ (expt b 2) (expt c 2) ) (expt a 2)) #true (if (= (+ (expt c 2) (expt a 2) ) (expt b 2)) #true #false ))))
 
 ;8
 
-(define (pitagorica?2v2 a b c) (if (= (+ (expt a 2) (expt b 2) ) (expt c 2)) (string-append "Los numeros " (number->string a) ", " (number->string b) " y " (number->string c) " forman una terna pitagórica.") (string-append "Los numeros " (number->string a) ", " (number->string b) " y " (number->string c) " no forman una terna pitagórica.") ) )
+(define (pitagorica?2v2 a b c) (if (= (+ (expt a 2) (expt b 2) ) (expt c 2)) (string-append "Los numeros " (number->string a) ", " (number->string b) " y " (number->string c) " forman una terna pitagórica.") (if (= (+ (expt b 2) (expt c 2) ) (expt a 2)) (string-append "Los numeros " (number->string a) ", " (number->string b) " y " (number->string c) " forman una terna pitagórica.") (if (= (+ (expt c 2) (expt a 2) ) (expt b 2)) (string-append "Los numeros " (number->string a) ", " (number->string b) " y " (number->string c) " forman una terna pitagórica.") (string-append "Los numeros " (number->string a) ", " (number->string b) " y " (number->string c) " no forman una terna pitagórica.") ) ) ))
 
 ;9
 
@@ -109,3 +111,56 @@
 ;suponiendo que el doble de grande es hacer el doble del tamaño del ancho y alto del empty-screen inicial de ancho 90 y alto 60, pasamos a ancho 180 y alto 120
 
 (define perux2 (place-image (rectangle (/ ANCHO 3) ALTO "solid" "red") (/ ANCHO 6) (/ ALTO 2) (place-image (rectangle (/ ANCHO 3) ALTO "solid" "white") (/ ANCHO 2) (/ ALTO 2) (place-image (rectangle (/ ANCHO 3) ALTO "solid" "red") (- ANCHO (/ ANCHO 6)) (/ ALTO 2) (empty-scene ANCHO ALTO)))))
+
+;Segunda parte:
+
+; Ejercicio 1.1.1
+
+;1
+
+; (sgn2 (- 2 3)) == (sgn2 -1) == (cond [(< -1 0) -1] [(= -1 0) 0] [(> -1 0) 1]) ==  (cond [#true -1] [(= -1 0) 0] [(> -1 0) 1]) == -1
+
+; (sgn2 6) == (cond [(< 6 0) -1] [(= 6 0) 0] [(> 6 0) 1]) == (cond [#false -1] [(= 6 0) 0] [(> 6 0) 1]) == (cond [(= 6 0) 0] [(> 6 0) 1]) ==  (cond [#false 0] [(> 6 0) 1]) == (cond [(> 6 0) 1]) == (cond [#true 1]) == 1
+
+;2.2
+
+(define (gofocv2 imagen) (cond [(= (image-height imagen) (image-width imagen)) "Cuadrada"][(> (image-height imagen) (image-width imagen)) "Flaca"][(< (image-height imagen) (image-width imagen)) "Gorda"]))
+
+;2.4
+
+(define (soloDosIguales? a b c) (cond [(= a b c) #f] [(tresDesiguales? a b c) #f] [(or (= a b) (= a c) (= c b) ) #t]))
+
+(define (triangulo?v3 a b c) (cond [(not(= (+ a b c) 180)) "Error"] [(tresDesiguales? a b c) "Escaleno"] [(= a b c) "Equilatero"] [(soloDosIguales? a b c) "Isosceles"]) )
+
+;2.6
+
+(define (precio_cond c l) (+ (cond [(>= c 4) (* PCD c)] [(< c 4) (* PC c)] ) (cond [(>= l 5) (* PLD l)] [(< l 5) (* PL l)]) ) )
+
+(define (preciov2_cond c l) (cond [(>= (+ c l) 10) (min (- (precioSinDesc c l) (/ (* (precioSinDesc c l) 18) 100) ) (preciov2 c l) )] [(< (+ c l) 10) (preciov2 c l)]) )
+
+;2.7
+
+(define (pitagorica?v2_cond a b c) (cond [(= (+ (expt a 2) (expt b 2) ) (expt c 2)) #t] [(= (+ (expt b 2) (expt c 2) ) (expt a 2)) #t] [(= (+ (expt c 2) (expt a 2) ) (expt b 2)) #t] [else #f]) )
+
+;3
+
+;(pitagorica?v2_cond 3 5 6) == #false
+
+;(pitagorica?v2_cond 3 5 4) == #true
+
+;4
+
+;ancho alto
+
+(define (gofoc_cond imagen) (cond [(<= (* 2 (image-height imagen)) (image-width imagen)) "Muy gorda"]
+                                  [(<= (* 2 (image-width imagen)) (image-height imagen)) "Muy flaca"]
+                                  [(= (image-height imagen) (image-width imagen)) "Cuadrada"]
+                                  [(> (image-height imagen) (image-width imagen)) "Flaca"]
+                                  [(< (image-height imagen) (image-width imagen)) "Gorda"]))
+
+
+
+
+
+
+
