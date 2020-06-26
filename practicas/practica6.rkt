@@ -138,12 +138,12 @@
 ; fibnat : Natural -> Natural
 ; toma un número natural y devuelve el valor
 ; correspondiente a la secuencia de Fibonacci para ese valor:
-; fibnat (0) = 1
+; fibnat (0) = 0
 ; fibnat (1) = 1
 ; fibnat (n+2) = fibnat (n) + fibnat (n+1)
-(check-expect (fibnat 6) 13)
+(check-expect (fibnat 6) 8)
 (check-expect (fibnat 1) 1)
-(define (fibnat n) (cond [(zero? n) 1]
+(define (fibnat n) (cond [(zero? n) 0]
                          [(= n 1) 1]
                          [else (+ (fibnat (sub1 n)) (fibnat (- n 2) ))]))
 
@@ -154,10 +154,10 @@
 ; primeros n+1 valores de la serie de fibonacci,
 ; ordenados de mayor a menor. Es decir, (listfibonacci n) = (list (fib n) (fib (- n 1)) ... (fib 0))3
 (check-expect (list-fibonacci 4)
-(list 5 3 2 1 1))
+(list 3 2 1 1 0))
 (check-expect (list-fibonacci 0)
-(list 1))
-(define (list-fibonacci n) (cond [(zero? n) (list 1)]
+(list 0))
+(define (list-fibonacci n) (cond [(zero? n) (list 0)]
                                  [else (cons (fibnat n) (list-fibonacci (sub1 n) ))]))
 
 ; Ejercicio 10
